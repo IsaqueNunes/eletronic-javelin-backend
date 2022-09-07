@@ -24,8 +24,33 @@ model Throw {
   id       Int      @id @default(autoincrement())
   dateTime DateTime @default(now()) @map("date_time")
 
-  User   User   @relation(fields: [userId], references: [id])
-  userId String @db.Uuid
+  User          User            @relation(fields: [userId], references: [id])
+  userId        String          @db.Uuid
+  ThrowAltitude ThrowAltitude[]
+  ThrowAngles   ThrowAngles[]
 
   @@map("throws")
+}
+
+model ThrowAltitude {
+  id       Int   @id @default(autoincrement())
+  altitude Float
+
+  Throw   Throw @relation(fields: [throwId], references: [id])
+  throwId Int
+
+  @@map("throw_altitude")
+}
+
+model ThrowAngles {
+  id Int @id @default(autoincrement())
+
+  x Float
+  y Float
+  z Float
+
+  Throw   Throw @relation(fields: [throwId], references: [id])
+  throwId Int
+
+  @@map("throw_angles")
 }

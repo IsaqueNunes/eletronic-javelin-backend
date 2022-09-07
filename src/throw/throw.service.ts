@@ -7,7 +7,10 @@ export class ThrowService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.ThrowCreateInput): Promise<Throw> {
-    return this.prisma.throw.create({ data });
+    return this.prisma.throw.create({
+      include: { ThrowAltitude: true, ThrowAngles: true },
+      data,
+    });
   }
 
   async find(
@@ -22,7 +25,28 @@ export class ThrowService {
     cursor?: Prisma.ThrowWhereUniqueInput;
     where?: Prisma.ThrowWhereInput;
     orderBy?: Prisma.ThrowOrderByWithRelationInput;
-  }): Promise<Throw[]> {
+  }): Promise<
+    Prisma.ThrowGetPayload<{
+      select: {
+        id: true;
+        dateTime: true;
+        ThrowAltitude: {
+          select: {
+            id: true;
+            altitude: true;
+          };
+        };
+        ThrowAngles: {
+          select: {
+            id: true;
+            x: true;
+            y: true;
+            z: true;
+          };
+        };
+      };
+    }>[]
+  > {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.throw.findMany({
       skip,
@@ -30,6 +54,24 @@ export class ThrowService {
       cursor,
       where,
       orderBy,
+      select: {
+        id: true,
+        dateTime: true,
+        ThrowAltitude: {
+          select: {
+            id: true,
+            altitude: true,
+          },
+        },
+        ThrowAngles: {
+          select: {
+            id: true,
+            x: true,
+            y: true,
+            z: true,
+          },
+        },
+      },
     });
   }
 
