@@ -11,10 +11,21 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid()) @db.Uuid
+  id       String  @id @default(uuid()) @db.Uuid
   name     String
-  email    String @unique
+  email    String  @unique
   password String
+  Throw    Throw[]
 
   @@map("users")
+}
+
+model Throw {
+  id       Int      @id @default(autoincrement())
+  dateTime DateTime @default(now()) @map("date_time")
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+
+  @@map("throws")
 }
