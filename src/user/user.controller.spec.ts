@@ -18,6 +18,28 @@ describe('UserController', () => {
     userController = moduleRef.get<UserController>(UserController);
   });
 
+  describe('create', () => {
+    it('should create an user', async () => {
+      const result: User = {
+        id: 'asdf',
+        name: 'Isaque Nunes',
+        email: 'isaque.nunes@estudante.ifms.edu.br',
+        password: '1234',
+      };
+
+      jest.spyOn(userService, 'create').mockImplementation(async () => result);
+
+      expect(
+        await userController.create({
+          id: 'asdf',
+          name: 'Isaque Nunes',
+          email: 'isaque.nunes@estudante.ifms.edu.br',
+          password: '1234',
+        }),
+      ).toBe(result);
+    });
+  });
+
   describe('find', () => {
     it('should return an array of users', async () => {
       const result: User[] = [
